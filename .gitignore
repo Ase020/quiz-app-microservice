@@ -1,0 +1,94 @@
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+*.jar.original
+*.factorypath
+.mtj.tmp/
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### Gradle ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+**/build/
+
+### STS/Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+*.code-workspace
+
+### OS specific ###
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+*.lnk
+
+### Logs and databases ###
+*.log
+*.sqlite
+*.db
+
+### Environment files ###
+.env
+.env.local
+.env.*.local
+application-*.properties
+application-*.yml
+!application-example.properties
+!application-example.yml
+
+### Spring Boot specific ###
+**/HELP.md
+**/src/main/**/application-local.properties
+**/src/main/**/application-local.yml
+
+### Node (in case of frontend integration) ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
