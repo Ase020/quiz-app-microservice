@@ -5,6 +5,7 @@ import com.asejnr.question_service.model.Response;
 import com.asejnr.question_service.service.QuestionService;
 import com.asejnr.question_service.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import java.util.List;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    Environment environment;
 
     @GetMapping
     public ResponseEntity<List<Question>> getAllQuestions() throws Exception {
@@ -65,6 +69,7 @@ public class QuestionController {
 
     @PostMapping("/get-quiz-questions")
     public ResponseEntity<List<QuestionWrapper>> getQuestionsFromIds(@RequestBody List<Integer> questionIds) {
+        System.out.println("Environment variable: " + environment.getProperty("local.server.port"));
         return questionService.getQuestionsFromIds(questionIds);
     }
 
