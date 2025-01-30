@@ -1,11 +1,13 @@
 package com.asejnr.quiz_service.service;
 
+import com.asejnr.quiz_service.exception.QuizNotFoundException;
 import com.asejnr.quiz_service.feign.QuizInterface;
 import com.asejnr.quiz_service.model.QuestionWrapper;
 import com.asejnr.quiz_service.model.Quiz;
 import com.asejnr.quiz_service.model.Response;
 //import com.asejnr.quiz_service.repository.QuestionRepository;
 import com.asejnr.quiz_service.repository.QuizRepository;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,47 +39,27 @@ public class QuizService {
     }
 
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(int id) {
-//        Optional<Quiz> quiz = quizRepository.findById(id);
-//        if (quiz.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        List<Question> questions = quiz.get().getQuestions();
-//        if (questions == null || questions.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-        List<QuestionWrapper> questionsForUser = new ArrayList<>();
-//
-//        for (Question question : questions) {
-//            QuestionWrapper questionWrapper = new QuestionWrapper(
-//                    question.getId(),
-//                    question.getQuestionTitle(),
-//                    question.getOption1(),
-//                    question.getOption2(),
-//                    question.getOption3(),
-//                    question.getOption4());
-//            questionsForUser.add(questionWrapper);
-//        }
-        return new ResponseEntity<>(questionsForUser, HttpStatus.OK);
+        try {
+            Quiz quiz = quizRepository.findById(id).orElseThrow(() -> new QuizNotFoundException(id));
+
+            List<Integer> questionIds = quiz.getQuestionIds();
+            if (questionIds.isEmpty()) {
+                throw new QuizNotFoundException("Quiz with id " + id + " not found.");
+            }
+            List<QuestionWrapper> questionsForUser = quizInterface.getQuestionsFromIds(questionIds).getBody();
+            if (questionsForUser == null || questionsForUser.isEmpty()) {
+                throw new QuizNotFoundException("Questions with id " + id + " not found.");
+            }
+
+            return new ResponseEntity<>(questionsForUser, HttpStatus.OK);
+        }catch (QuizNotFoundException e) {
+            throw e;
+        } catch (FeignException e){
+            throw new RuntimeException("Error getting questions for quiz with id " + id, e);
+        }
     }
 
     public ResponseEntity<Integer> calculateResult(int id, List<Response> responses) {
-//            Optional<Quiz> quiz = quizRepository.findById(id);
-//            if (quiz.isEmpty()) {
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//            List<Question> questions = quiz.get().getQuestions();
-//            if (questions == null || questions.isEmpty()) {
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//
-            int right = 0;
-//            int increment = 0;
-//            for (Response response : responses) {
-//                if (response.getResponse().equals(questions.get(increment).getRightAnswer()))
-//                    right++;
-//
-//                increment++;
-//            }
-            return new ResponseEntity<>(right, HttpStatus.OK);
+       return quizInterface.getScore(responses);
     }
 }
