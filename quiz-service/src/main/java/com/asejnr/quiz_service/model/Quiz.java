@@ -1,11 +1,13 @@
 package com.asejnr.quiz_service.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 
 @Entity
+@Data
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +16,8 @@ public class Quiz {
     private int numberOfQuestions;
     private String category;
 
-    @ManyToMany
-    private List<Question> questions;
+    @ElementCollection
+    private List<Integer> questionIds;
 
     public int getId() {
         return id;
@@ -49,12 +51,12 @@ public class Quiz {
         this.category = category;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<Integer> getQuestionIds() {
+        return questionIds;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setQuestionIds(List<Integer> questionIds) {
+        this.questionIds = questionIds;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class Quiz {
                 ", title='" + title + '\'' +
                 ", numberOfQuestions=" + numberOfQuestions +
                 ", category='" + category + '\'' +
-                ", questions=" + questions +
+                ", questionIds=" + questionIds +
                 '}';
     }
 }

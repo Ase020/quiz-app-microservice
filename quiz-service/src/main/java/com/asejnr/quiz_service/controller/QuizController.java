@@ -1,5 +1,6 @@
 package com.asejnr.quiz_service.controller;
 
+import com.asejnr.quiz_service.dto.QuizDto;
 import com.asejnr.quiz_service.model.QuestionWrapper;
 import com.asejnr.quiz_service.model.Quiz;
 import com.asejnr.quiz_service.model.Response;
@@ -18,12 +19,8 @@ public class QuizController {
     private QuizService quizService;
 
     @PostMapping
-    public ResponseEntity<Quiz> createQuiz(
-            @RequestParam String category,
-            @RequestParam int numberOfQuestions,
-            @RequestParam String title
-            ) {
-        Quiz quiz = quizService.createQuiz(category, numberOfQuestions, title).getBody();
+    public ResponseEntity<Quiz> createQuiz(@RequestBody QuizDto quizDto) {
+        Quiz quiz = quizService.createQuiz(quizDto.getCategory(), quizDto.getNumberOfQuestions(), quizDto.getTitle()).getBody();
         return ResponseEntity.ok(quiz);
     }
 
